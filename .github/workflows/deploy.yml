@@ -1,0 +1,26 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    name: Deploy to Render
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Render
+        run: |
+          curl -s --request POST \
+            --url "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys" \
+            --header "accept: application/json" \
+            --header "content-type: application/json" \
+            --header "authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            --data '{"clearCache":"do_not_clear"}'
+
+      - name: Deployment triggered
+        run: echo "Deployed to Render successfully"
