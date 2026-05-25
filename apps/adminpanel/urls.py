@@ -2,7 +2,8 @@ from django.urls import path
 from .views import (
     PlatformStatsView, AdminUserListView, BanUserView, UnbanUserView,
     VerifyUserView, FlaggedListingsView, ApproveListingView, RejectListingView,
-    BroadcastNotificationView,
+    BroadcastNotificationView,  
+
 )
 
 urlpatterns = [
