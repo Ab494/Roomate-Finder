@@ -5,18 +5,6 @@ import environ
 from pathlib import Path
 from datetime import timedelta
 
-import dj_database_url
-
-# Replace your DATABASES block with this:
-DATABASES = {
-    'default': dj_database_url.config(
-        default=env('DATABASE_URL'),
-        conn_max_age=600,
-        ssl_require=True,
-    )
-}
-
-
 
 # Base directory of the project
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,7 +17,7 @@ environ.Env.read_env(BASE_DIR / '.env')
 # Security settings
 SECRET_KEY = env('SECRET_KEY', default='dev-secret-key-change-in-production')  # Secret key for cryptographic signing
 DEBUG = env('DEBUG')  # Enable/disable debug mode
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1'])  # Allowed hostnames for security
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1', '.onrender.com'])  # Allowed hostnames for security
 
 # Django core applications
 DJANGO_APPS = [
@@ -205,9 +193,3 @@ TIME_ZONE = 'Africa/Nairobi'
 USE_I18N = True
 USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# Update ALLOWED_HOSTS:
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[
-    'localhost',
-    '127.0.0.1',
-    '.onrender.com',   # ← add this
-])
