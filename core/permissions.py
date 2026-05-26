@@ -40,3 +40,12 @@ class IsVerified(BasePermission):
 
     def has_permission(self, request, view):
         return request.user and request.user.is_verified
+
+
+class IsOwner(BasePermission):
+    """
+    Only allows access to the owner of the object.
+    No read access for non-owners (stricter than IsOwnerOrReadOnly).
+    """
+    def has_object_permission(self, request, view, obj):
+        return obj.owner == request.user

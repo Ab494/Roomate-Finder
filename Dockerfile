@@ -1,26 +1,65 @@
-FROM python:3.12-slim
+# ── Stage 1: Builder ──────────────────────────────────────────────────────────
+FROM python:3.12-slim AS builder
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# System dependencies
-RUN apt-get update && apt-get install -y \
+# Build-time system deps (gcc needed to compile psycopg2, etc.)
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Python dependencies
+# Compile all dependencies into wheels (binary packages)
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip && \
+    pip wheel --no-cache-dir --no-deps --wheel-dir /wheels -r requirements.txt
 
-# Project files
+
+# ── Stage 2: Runtime ──────────────────────────────────────────────────────────
+FROM python:3.12-slim AS runtime
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PORT=8000
+
+WORKDIR /app
+
+# Only runtime deps (no gcc)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create a non-root user to run the app
+RUN addgroup --system appgroup && \
+    adduser --system --ingroup appgroup appuser
+
+# Install pre-built wheels from Stage 1 (no recompiling)
+COPY --from=builder /wheels /wheels
+RUN pip install --no-cache-dir /wheels/*
+
+# Copy project files
 COPY . .
 
-# Collect static files
-RUN python manage.py collectstatic --noinput
+# Create folders and give ownership to appuser
+RUN mkdir -p staticfiles media && \
+    chown -R appuser:appgroup /app
+
+# Switch to non-root user
+USER appuser
 
 EXPOSE 8000
 
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "4", "--timeout", "120"]
+# collectstatic and migrate run at STARTUP (env vars are available here)
+CMD ["sh", "-c", "python manage.py migrate --noinput && \
+                  python manage.py collectstatic --noinput && \
+                  gunicorn config.wsgi:application \
+                    --bind 0.0.0.0:${PORT} \
+                    --workers 4 \
+                    --threads 2 \
+                    --timeout 120 \
+                    --access-logfile - \
+                    --error-logfile -"]
