@@ -26,19 +26,19 @@ class TestBudgetScore:
 @pytest.mark.django_db
 class TestLifestyleScore:
     def test_identical_lifestyle(self):
-        pref_a = PreferenceFactory.build(sleep_schedule="early", cleanliness="clean", noise_level="quiet")
-        pref_b = PreferenceFactory.build(sleep_schedule="early", cleanliness="clean", noise_level="quiet")
+        pref_a = PreferenceFactory.build(sleep_schedule="early", cleanliness="clean", noise_tolerance="quiet")
+        pref_b = PreferenceFactory.build(sleep_schedule="early", cleanliness="clean", noise_tolerance="quiet")
         assert _lifestyle_score(pref_a, pref_b) == 25.0
 
     def test_opposite_lifestyle(self):
-        pref_a = PreferenceFactory.build(sleep_schedule="early", cleanliness="very_clean", noise_level="quiet")
-        pref_b = PreferenceFactory.build(sleep_schedule="night", cleanliness="relaxed", noise_level="lively")
+        pref_a = PreferenceFactory.build(sleep_schedule="early", cleanliness="very_clean", noise_tolerance="quiet")
+        pref_b = PreferenceFactory.build(sleep_schedule="night", cleanliness="messy", noise_tolerance="loud")
         score = _lifestyle_score(pref_a, pref_b)
         assert score < 10
 
     def test_flexible_sleep_partial_score(self):
-        pref_a = PreferenceFactory.build(sleep_schedule="flexible", cleanliness="clean", noise_level="moderate")
-        pref_b = PreferenceFactory.build(sleep_schedule="night", cleanliness="clean", noise_level="moderate")
+        pref_a = PreferenceFactory.build(sleep_schedule="flexible", cleanliness="clean", noise_tolerance="moderate")
+        pref_b = PreferenceFactory.build(sleep_schedule="night", cleanliness="clean", noise_tolerance="moderate")
         score = _lifestyle_score(pref_a, pref_b)
         assert score > 15
 
@@ -61,16 +61,16 @@ class TestComputeCompatibility:
     def test_compatible_users(self):
         user_a = UserFactory()
         user_b = UserFactory()
-        ProfileFactory(user=user_a, lat=-1.28, lng=36.82, city="Nairobi", gender="male")
-        ProfileFactory(user=user_b, lat=-1.29, lng=36.83, city="Nairobi", gender="male")
+        ProfileFactory(user=user_a, lat=-1.28, lng=36.82, city="Nairobi")
+        ProfileFactory(user=user_b, lat=-1.29, lng=36.83, city="Nairobi")
         PreferenceFactory(
             user=user_a,
             min_budget=10000,
             max_budget=20000,
-            gender_preference="any",
+            preferred_gender="any",
             sleep_schedule="early",
             cleanliness="clean",
-            noise_level="quiet",
+            noise_tolerance="quiet",
             smoking_ok=False,
             pets_ok=False,
             guests_ok=True,
@@ -79,10 +79,10 @@ class TestComputeCompatibility:
             user=user_b,
             min_budget=10000,
             max_budget=20000,
-            gender_preference="any",
+            preferred_gender="any",
             sleep_schedule="early",
             cleanliness="clean",
-            noise_level="quiet",
+            noise_tolerance="quiet",
             smoking_ok=False,
             pets_ok=False,
             guests_ok=True,

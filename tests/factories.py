@@ -14,11 +14,11 @@ class UserFactory(DjangoModelFactory):
     class Meta:
         model = User
 
+    username = factory.Sequence(lambda n: f"user{n}")
     email = factory.Sequence(lambda n: f"user{n}@test.com")
-    phone = factory.Sequence(lambda n: f"+2547{n:08d}")
     role = "seeker"
     is_active = True
-    is_verified = True
+    verification_status = "verified"
 
     @factory.post_generation
     def password(obj, create, extracted, **kwargs):
@@ -32,10 +32,9 @@ class ProfileFactory(DjangoModelFactory):
         model = Profile
 
     user = factory.SubFactory(UserFactory)
-    full_name = factory.Faker("name")
+    first_name = factory.Faker("first_name")
+    last_name = factory.Faker("last_name")
     bio = factory.Faker("sentence")
-    gender = "male"
-    age = factory.Faker("random_int", min=18, max=45)
     occupation = "Engineer"
     city = "Nairobi"
     area = "Westlands"
@@ -50,10 +49,10 @@ class PreferenceFactory(DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     min_budget = 10000
     max_budget = 25000
-    gender_preference = "any"
+    preferred_gender = "any"
     sleep_schedule = "flexible"
     cleanliness = "clean"
-    noise_level = "moderate"
+    noise_tolerance = "moderate"
     smoking_ok = False
     pets_ok = False
     guests_ok = True
