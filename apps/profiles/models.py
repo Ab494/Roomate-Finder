@@ -65,15 +65,15 @@ class User(AbstractUser):
 # Profile model contains additional user information beyond basic auth
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")  # Link to User model
-    first_name = models.CharField(max_length=50)  # User's first name
-    last_name = models.CharField(max_length=50)  # User's last name
+    first_name = models.CharField(max_length=50, default="")  # User's first name
+    last_name = models.CharField(max_length=50, default="")  # User's last name
     phone = models.CharField(max_length=15, blank=True)  # Phone number
     bio = models.TextField(blank=True)  # User's biography/description
     date_of_birth = models.DateField(null=True, blank=True)  # Birth date
     occupation = models.CharField(max_length=100, blank=True)  # Job/occupation
     # Location information
-    city = models.CharField(max_length=100)  # City of residence
-    area = models.CharField(max_length=100)  # Specific area/neighborhood
+    city = models.CharField(max_length=100, default="")  # City of residence
+    area = models.CharField(max_length=100, default="")  # Specific area/neighborhood
     lat = models.FloatField(null=True, blank=True)  # Latitude coordinate
     lng = models.FloatField(null=True, blank=True)  # Longitude coordinate
     # Media files
@@ -179,7 +179,7 @@ class Preference(models.Model):
     preferred_areas = models.JSONField(
         default=list, help_text="List of preferred area IDs"
     )  # List of preferred location IDs
-    created_at = models.DateTimeField(auto_now_add=True)  # When preferences were created
+    created_at = models.DateTimeField(auto_now_add=True, null=True)  # When preferences were created
     updated_at = models.DateTimeField(auto_now=True)  # When preferences were last updated
 
     class Meta:
