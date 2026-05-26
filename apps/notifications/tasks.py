@@ -10,6 +10,7 @@ def send_notification(self, user_id, message, notif_type="system", channel="in_a
     channel: 'in_app' | 'sms' | 'email' | 'both'
     """
     from django.contrib.auth import get_user_model
+
     from .models import Notification
 
     User = get_user_model()

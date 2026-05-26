@@ -1,17 +1,17 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import generics, status
 from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
 from django.db.models import Avg
+from django.shortcuts import get_object_or_404
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from core.permissions import IsAdminUser
-from apps.profiles.serializers import UserSerializer
 from apps.listings.models import Listing
 from apps.listings.serializers import ListingSerializer
 from apps.matching.models import Match
 from apps.notifications.models import Notification
 from apps.notifications.tasks import send_bulk_notification
+from apps.profiles.serializers import UserSerializer
+from core.permissions import IsAdminUser
 
 User = get_user_model()
 

@@ -1,10 +1,10 @@
 # This file defines the review models for user ratings and feedback.
 # Models handle reviews between users and automatically update profile ratings.
 
-from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
-from django.db.models import Avg
 from django.contrib.auth import get_user_model
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db import models
+from django.db.models import Avg
 
 # Get the custom User model
 User = get_user_model()

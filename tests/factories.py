@@ -1,10 +1,11 @@
 import factory
-from factory.django import DjangoModelFactory
 from django.contrib.auth import get_user_model
-from apps.profiles.models import Profile, Preference
+from factory.django import DjangoModelFactory
+
 from apps.listings.models import Listing
-from apps.reviews.models import Review
 from apps.matching.models import Match
+from apps.profiles.models import Preference, Profile
+from apps.reviews.models import Review
 
 User = get_user_model()
 

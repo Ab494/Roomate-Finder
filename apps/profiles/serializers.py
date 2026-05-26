@@ -1,9 +1,10 @@
 # This file contains Django REST Framework serializers for user profiles.
 # Serializers handle data validation, conversion, and API response formatting.
 
-from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Profile, Preference
+from rest_framework import serializers
+
+from .models import Preference, Profile
 
 # Get the custom User model
 User = get_user_model()

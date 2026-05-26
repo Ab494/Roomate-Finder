@@ -2,6 +2,7 @@
 # Celery handles asynchronous tasks like match computation and notification sending.
 
 import os
+
 from celery import Celery
 
 # Set Django settings module for Celery worker processes

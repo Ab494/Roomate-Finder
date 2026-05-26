@@ -1,8 +1,8 @@
 # This file defines the data models for room listings in the Roommate Finder app.
 # Models represent database tables for storing room listing information.
 
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 
 # Get the custom User model
 User = get_user_model()

@@ -3,7 +3,8 @@
 
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from apps.profiles.views import RegisterView, LogoutView, ChangePasswordView
+
+from apps.profiles.views import ChangePasswordView, LogoutView, RegisterView
 
 urlpatterns = [
     # User registration endpoint

@@ -1,14 +1,15 @@
 from django.urls import path
+
 from .views import (
-    PlatformStatsView,
     AdminUserListView,
+    ApproveListingView,
     BanUserView,
+    BroadcastNotificationView,
+    FlaggedListingsView,
+    PlatformStatsView,
+    RejectListingView,
     UnbanUserView,
     VerifyUserView,
-    FlaggedListingsView,
-    ApproveListingView,
-    RejectListingView,
-    BroadcastNotificationView,
 )
 
 urlpatterns = [

@@ -1,18 +1,19 @@
 # This file contains API views for the roommate matching system.
 # Handles match suggestions, requests, accept/decline actions, and match listing.
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status, generics
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.shortcuts import get_object_or_404
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .models import Match
-from .serializers import MatchSerializer, MatchSuggestionSerializer, MatchRequestSerializer
-from .tasks import compute_matches_for_user
-from .algorithm import compute_compatibility
 from apps.notifications.tasks import send_notification
+
+from .algorithm import compute_compatibility
+from .models import Match
+from .serializers import MatchRequestSerializer, MatchSerializer, MatchSuggestionSerializer
+from .tasks import compute_matches_for_user
 
 # Get the custom User model
 User = get_user_model()

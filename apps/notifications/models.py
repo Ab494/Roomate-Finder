@@ -1,8 +1,8 @@
 # This file defines the notification models for user alerts and preferences.
 # Models handle in-app, SMS, and email notifications for various platform events.
 
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 
 # Get the custom User model
 User = get_user_model()

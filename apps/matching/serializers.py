@@ -1,5 +1,7 @@
 from rest_framework import serializers
+
 from apps.profiles.serializers import ProfileSerializer
+
 from .models import Match
 
 
@@ -32,6 +34,7 @@ class MatchSuggestionSerializer(serializers.Serializer):
 
     def get_profile(self, obj):
         from django.contrib.auth import get_user_model
+
         from apps.profiles.serializers import ProfileSerializer
 
         User = get_user_model()

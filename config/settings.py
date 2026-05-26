@@ -1,10 +1,10 @@
 # Django settings for Roommate Finder project
 # This file configures the Django application with all necessary settings
 
-import environ
-from pathlib import Path
 from datetime import timedelta
+from pathlib import Path
 
+import environ
 
 # Base directory of the project
 BASE_DIR = Path(__file__).resolve().parent.parent

@@ -1,10 +1,10 @@
-from rest_framework import generics
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import Notification, NotificationPreference
-from .serializers import NotificationSerializer, NotificationPreferenceSerializer
+from .serializers import NotificationPreferenceSerializer, NotificationSerializer
 
 
 class NotificationListView(generics.ListAPIView):

@@ -1,7 +1,7 @@
 # This file defines custom permission classes for the Roommate Finder API.
 # Permissions control who can access specific views and perform certain actions.
 
-from rest_framework.permissions import BasePermission, SAFE_METHODS
+from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 
 class IsOwnerOrReadOnly(BasePermission):

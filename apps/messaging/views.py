@@ -1,12 +1,11 @@
-from rest_framework import generics, status
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import Conversation, Message
-from .serializers import ConversationSerializer, MessageSerializer, CreateConversationSerializer
+from .serializers import ConversationSerializer, CreateConversationSerializer, MessageSerializer
 
 User = get_user_model()
 

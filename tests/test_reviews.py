@@ -1,6 +1,7 @@
 import pytest
 from rest_framework.test import APIClient
-from tests.factories import UserFactory, ProfileFactory, ReviewFactory
+
+from tests.factories import ProfileFactory, ReviewFactory, UserFactory
 
 
 @pytest.mark.django_db

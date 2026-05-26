@@ -1,8 +1,9 @@
 # This file defines the matching models for roommate compatibility.
 # Models store compatibility matches between users, optionally tied to specific listings.
 
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
+
 from apps.listings.models import Listing
 
 # Get the custom User model

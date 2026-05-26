@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import MatchSuggestionsView, MatchRequestView, MatchActionView, MyMatchesView
+
+from .views import MatchActionView, MatchRequestView, MatchSuggestionsView, MyMatchesView
 
 urlpatterns = [
     path("suggestions/", MatchSuggestionsView.as_view(), name="match-suggestions"),

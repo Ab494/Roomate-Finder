@@ -2,6 +2,7 @@
 # Handles profile viewing, editing, preferences, and location updates.
 
 from django.urls import path
+
 from .. import views
 
 urlpatterns = [

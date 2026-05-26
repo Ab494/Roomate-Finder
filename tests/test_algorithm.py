@@ -1,6 +1,7 @@
 import pytest
-from apps.matching.algorithm import compute_compatibility, _budget_score, _lifestyle_score, _boolean_score
-from tests.factories import UserFactory, ProfileFactory, PreferenceFactory
+
+from apps.matching.algorithm import _boolean_score, _budget_score, _lifestyle_score, compute_compatibility
+from tests.factories import PreferenceFactory, ProfileFactory, UserFactory
 
 
 @pytest.mark.django_db

@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import ReviewListCreateView, UserReviewsView, ReviewDetailView, ReportReviewView
+
+from .views import ReportReviewView, ReviewDetailView, ReviewListCreateView, UserReviewsView
 
 urlpatterns = [
     path("", ReviewListCreateView.as_view(), name="review-list"),
