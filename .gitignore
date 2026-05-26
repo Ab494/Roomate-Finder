@@ -30,11 +30,12 @@ db.sqlite3
 db.sqlite3-journal
 staticfiles/
 media/
+logs/
 
-# Environment
+# Environment — NEVER commit real .env files
 .env
-.env.local
-.env.production
+.env.*
+!.env.example
 
 # IDE
 .vscode/
@@ -43,53 +44,17 @@ media/
 *.swo
 .DS_Store
 
-# Docker
-*.pid
-
-# Coverage
+# Testing
 .coverage
 htmlcov/
 .pytest_cache/
+coverage.xml
+coverage/
 
 # Terraform
-.terraform/
+**/.terraform/
 *.tfstate
 *.tfstate.backup
-terraform.tfvars
-*.generated.yml
-*.generated
-
-# Testing
-coverage/
-.coverage
-htmlcov/
-
-# Logs
-logs/
-*.log
-
-# Media uploads
-media/
-
-# Terraform
-.terraform/
-*.tfstate
-*.tfstate.backup
-terraform.tfvars
-*.generated.yml
-*.generated
-
-# Coverage
-coverage/
-.coverage
-htmlcov/
-
-# Logs
-logs/
-*.log
-
-# Media uploads
-media/
-
-# Static files
-staticfiles/
+*.tfvars
+!terraform.tfvars.example
+.terraform.lock.hcl
