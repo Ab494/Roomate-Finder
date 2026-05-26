@@ -8,14 +8,14 @@ from channels.auth import AuthMiddlewareStack
 from apps.messaging.routing import websocket_urlpatterns
 
 # Set Django settings module
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 
 # Create ASGI application that handles both HTTP and WebSocket protocols
-application = ProtocolTypeRouter({
-    # Handle HTTP requests with Django's standard ASGI application
-    'http': get_asgi_application(),
-    # Handle WebSocket connections with authentication and custom routing
-    'websocket': AuthMiddlewareStack(
-        URLRouter(websocket_urlpatterns)  # Routes defined in messaging app
-    ),
-})
+application = ProtocolTypeRouter(
+    {
+        # Handle HTTP requests with Django's standard ASGI application
+        "http": get_asgi_application(),
+        # Handle WebSocket connections with authentication and custom routing
+        "websocket": AuthMiddlewareStack(URLRouter(websocket_urlpatterns)),  # Routes defined in messaging app
+    }
+)

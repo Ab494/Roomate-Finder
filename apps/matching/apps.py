@@ -1,4 +1,6 @@
 from django.apps import AppConfig
+
+
 class matchingConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.matching'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "apps.matching"

@@ -12,27 +12,26 @@ User = get_user_model()
 
 class Review(models.Model):
     """Model for storing user reviews and ratings with automatic profile updates."""
+
     # User who wrote the review
-    reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews_given')
+    reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews_given")
     # User being reviewed
-    reviewee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews_received')
+    reviewee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews_received")
     # Rating from 1 to 5 stars with validation
-    rating = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(5)]
-    )
+    rating = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     # Optional text comment
     comment = models.TextField(blank=True)
     # Moderation flags
     is_reported = models.BooleanField(default=False)  # Whether review has been reported
-    report_reason = models.TextField(blank=True)     # Reason for reporting
+    report_reason = models.TextField(blank=True)  # Reason for reporting
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)  # When review was created
-    updated_at = models.DateTimeField(auto_now=True)     # When review was last updated
+    updated_at = models.DateTimeField(auto_now=True)  # When review was last updated
 
     class Meta:
-        db_table = 'reviews'  # Database table name
-        unique_together = [['reviewer', 'reviewee']]  # One review per reviewer-reviewee pair
-        ordering = ['-created_at']  # Order by newest first
+        db_table = "reviews"  # Database table name
+        unique_together = [["reviewer", "reviewee"]]  # One review per reviewer-reviewee pair
+        ordering = ["-created_at"]  # Order by newest first
 
     def __str__(self):
         # String representation with star emoji
@@ -56,12 +55,12 @@ class Review(models.Model):
         # Get all reviews for this user
         reviews = Review.objects.filter(reviewee=target)
         # Calculate average rating
-        avg = reviews.aggregate(Avg('rating'))['rating__avg'] or 0.0
+        avg = reviews.aggregate(Avg("rating"))["rating__avg"] or 0.0
         try:
             # Update profile with new rating and count
             target.profile.average_rating = round(avg, 1)
             target.profile.total_reviews = reviews.count()
-            target.profile.save(update_fields=['average_rating', 'total_reviews'])
+            target.profile.save(update_fields=["average_rating", "total_reviews"])
         except Exception:
             # Ignore errors (e.g., if profile doesn't exist)
             pass

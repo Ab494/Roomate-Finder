@@ -1,7 +1,5 @@
 import pytest
-from apps.matching.algorithm import (
-    compute_compatibility, _budget_score, _lifestyle_score, _boolean_score
-)
+from apps.matching.algorithm import compute_compatibility, _budget_score, _lifestyle_score, _boolean_score
 from tests.factories import UserFactory, ProfileFactory, PreferenceFactory
 
 
@@ -27,27 +25,19 @@ class TestBudgetScore:
 @pytest.mark.django_db
 class TestLifestyleScore:
     def test_identical_lifestyle(self):
-        pref_a = PreferenceFactory.build(
-            sleep_schedule='early', cleanliness='clean', noise_level='quiet'
-        )
-        pref_b = PreferenceFactory.build(
-            sleep_schedule='early', cleanliness='clean', noise_level='quiet'
-        )
+        pref_a = PreferenceFactory.build(sleep_schedule="early", cleanliness="clean", noise_level="quiet")
+        pref_b = PreferenceFactory.build(sleep_schedule="early", cleanliness="clean", noise_level="quiet")
         assert _lifestyle_score(pref_a, pref_b) == 25.0
 
     def test_opposite_lifestyle(self):
-        pref_a = PreferenceFactory.build(
-            sleep_schedule='early', cleanliness='very_clean', noise_level='quiet'
-        )
-        pref_b = PreferenceFactory.build(
-            sleep_schedule='night', cleanliness='relaxed', noise_level='lively'
-        )
+        pref_a = PreferenceFactory.build(sleep_schedule="early", cleanliness="very_clean", noise_level="quiet")
+        pref_b = PreferenceFactory.build(sleep_schedule="night", cleanliness="relaxed", noise_level="lively")
         score = _lifestyle_score(pref_a, pref_b)
         assert score < 10
 
     def test_flexible_sleep_partial_score(self):
-        pref_a = PreferenceFactory.build(sleep_schedule='flexible', cleanliness='clean', noise_level='moderate')
-        pref_b = PreferenceFactory.build(sleep_schedule='night', cleanliness='clean', noise_level='moderate')
+        pref_a = PreferenceFactory.build(sleep_schedule="flexible", cleanliness="clean", noise_level="moderate")
+        pref_b = PreferenceFactory.build(sleep_schedule="night", cleanliness="clean", noise_level="moderate")
         score = _lifestyle_score(pref_a, pref_b)
         assert score > 15
 
@@ -70,25 +60,37 @@ class TestComputeCompatibility:
     def test_compatible_users(self):
         user_a = UserFactory()
         user_b = UserFactory()
-        ProfileFactory(user=user_a, lat=-1.28, lng=36.82, city='Nairobi', gender='male')
-        ProfileFactory(user=user_b, lat=-1.29, lng=36.83, city='Nairobi', gender='male')
+        ProfileFactory(user=user_a, lat=-1.28, lng=36.82, city="Nairobi", gender="male")
+        ProfileFactory(user=user_b, lat=-1.29, lng=36.83, city="Nairobi", gender="male")
         PreferenceFactory(
-            user=user_a, min_budget=10000, max_budget=20000,
-            gender_preference='any', sleep_schedule='early',
-            cleanliness='clean', noise_level='quiet',
-            smoking_ok=False, pets_ok=False, guests_ok=True
+            user=user_a,
+            min_budget=10000,
+            max_budget=20000,
+            gender_preference="any",
+            sleep_schedule="early",
+            cleanliness="clean",
+            noise_level="quiet",
+            smoking_ok=False,
+            pets_ok=False,
+            guests_ok=True,
         )
         PreferenceFactory(
-            user=user_b, min_budget=10000, max_budget=20000,
-            gender_preference='any', sleep_schedule='early',
-            cleanliness='clean', noise_level='quiet',
-            smoking_ok=False, pets_ok=False, guests_ok=True
+            user=user_b,
+            min_budget=10000,
+            max_budget=20000,
+            gender_preference="any",
+            sleep_schedule="early",
+            cleanliness="clean",
+            noise_level="quiet",
+            smoking_ok=False,
+            pets_ok=False,
+            guests_ok=True,
         )
         score, breakdown = compute_compatibility(user_a, user_b)
         assert score > 70
-        assert 'budget' in breakdown
-        assert 'lifestyle' in breakdown
-        assert 'total' in breakdown
+        assert "budget" in breakdown
+        assert "lifestyle" in breakdown
+        assert "total" in breakdown
 
     def test_incompatible_budget_zeroes_score(self):
         user_a = UserFactory()
@@ -98,7 +100,7 @@ class TestComputeCompatibility:
         PreferenceFactory(user=user_a, min_budget=5000, max_budget=8000)
         PreferenceFactory(user=user_b, min_budget=40000, max_budget=80000)
         score, breakdown = compute_compatibility(user_a, user_b)
-        assert breakdown['budget'] == 0.0
+        assert breakdown["budget"] == 0.0
 
     def test_missing_profile_returns_zero(self):
         user_a = UserFactory()

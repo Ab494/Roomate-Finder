@@ -10,16 +10,17 @@ User = get_user_model()
 
 class Conversation(models.Model):
     """Model representing a chat conversation between multiple users."""
+
     # Users participating in this conversation (many-to-many relationship)
-    participants = models.ManyToManyField(User, related_name='conversations')
+    participants = models.ManyToManyField(User, related_name="conversations")
     # Timestamp when conversation was created
     created_at = models.DateTimeField(auto_now_add=True)
     # Timestamp when conversation was last updated (new message)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = 'conversations'  # Database table name
-        ordering = ['-updated_at']  # Order by most recently updated first
+        db_table = "conversations"  # Database table name
+        ordering = ["-updated_at"]  # Order by most recently updated first
 
     def get_other_participant(self, user):
         """Get the other participant in a two-person conversation."""
@@ -32,10 +33,11 @@ class Conversation(models.Model):
 
 class Message(models.Model):
     """Model representing individual messages within a conversation."""
+
     # Conversation this message belongs to
-    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='messages')
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name="messages")
     # User who sent the message
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_messages")
     # Text content of the message
     content = models.TextField()
     # Whether the message has been read by recipients
@@ -44,8 +46,8 @@ class Message(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'messages'  # Database table name
-        ordering = ['created_at']  # Order messages chronologically
+        db_table = "messages"  # Database table name
+        ordering = ["created_at"]  # Order messages chronologically
 
     def __str__(self):
         # String representation showing sender and conversation

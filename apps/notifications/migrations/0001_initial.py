@@ -15,33 +15,68 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Notification',
+            name="Notification",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type', models.CharField(choices=[('match_request', 'Match Request'), ('match_accepted', 'Match Accepted'), ('new_message', 'New Message'), ('review', 'New Review'), ('listing', 'Listing Update'), ('system', 'System')], default='system', max_length=20)),
-                ('channel', models.CharField(choices=[('in_app', 'In App'), ('sms', 'SMS'), ('email', 'Email'), ('both', 'SMS + Email')], default='in_app', max_length=10)),
-                ('message', models.TextField()),
-                ('is_read', models.BooleanField(default=False)),
-                ('sent_at', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='notifications', to=settings.AUTH_USER_MODEL)),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                (
+                    "type",
+                    models.CharField(
+                        choices=[
+                            ("match_request", "Match Request"),
+                            ("match_accepted", "Match Accepted"),
+                            ("new_message", "New Message"),
+                            ("review", "New Review"),
+                            ("listing", "Listing Update"),
+                            ("system", "System"),
+                        ],
+                        default="system",
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "channel",
+                    models.CharField(
+                        choices=[("in_app", "In App"), ("sms", "SMS"), ("email", "Email"), ("both", "SMS + Email")],
+                        default="in_app",
+                        max_length=10,
+                    ),
+                ),
+                ("message", models.TextField()),
+                ("is_read", models.BooleanField(default=False)),
+                ("sent_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="notifications",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'db_table': 'notifications',
-                'ordering': ['-sent_at'],
+                "db_table": "notifications",
+                "ordering": ["-sent_at"],
             },
         ),
         migrations.CreateModel(
-            name='NotificationPreference',
+            name="NotificationPreference",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('match_channel', models.CharField(default='both', max_length=10)),
-                ('message_channel', models.CharField(default='in_app', max_length=10)),
-                ('review_channel', models.CharField(default='in_app', max_length=10)),
-                ('system_channel', models.CharField(default='in_app', max_length=10)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='notification_prefs', to=settings.AUTH_USER_MODEL)),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("match_channel", models.CharField(default="both", max_length=10)),
+                ("message_channel", models.CharField(default="in_app", max_length=10)),
+                ("review_channel", models.CharField(default="in_app", max_length=10)),
+                ("system_channel", models.CharField(default="in_app", max_length=10)),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="notification_prefs",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'db_table': 'notification_preferences',
+                "db_table": "notification_preferences",
             },
         ),
     ]
