@@ -7,7 +7,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 
 from core.permissions import IsOwnerOrReadOnly
 from core.utils import haversine_distance
-from .models import Listing, ListingPhoto
+from .models import Listing, ListingPhoto  # noqa: F401
 from .serializers import (
     ListingSerializer, ListingCreateSerializer, ListingPhotoUploadSerializer
 )

@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import generics, status
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from django.db.models import Count, Avg
+from django.db.models import Avg
 
 from core.permissions import IsAdminUser
 from apps.profiles.serializers import UserSerializer

@@ -1,12 +1,9 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 # This file defines the data models for user profiles in the Roommate Finder app.
 # Models represent database tables and define the structure of data stored.
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.utils.translation import gettext_lazy as _
-from django.conf import settings
 
 # Custom User model that extends Django's built-in AbstractUser
 # This allows us to add extra fields specific to our roommate finder app
