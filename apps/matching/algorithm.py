@@ -42,9 +42,9 @@ def _gender_score(pref_a, profile_b, pref_b, profile_a):
 
     def _ok(pref, profile):
         # Check if preference accepts the profile's gender
-        if pref.gender_preference == "any":
+        if pref.preferred_gender == "any":
             return True  # Accepts any gender
-        return pref.gender_preference == profile.gender
+        return pref.preferred_gender == profile.user.role
 
     # Both mutually acceptable = full 20 points
     if _ok(pref_a, profile_b) and _ok(pref_b, profile_a):
@@ -73,8 +73,8 @@ def _lifestyle_score(pref_a, pref_b):
     score += max(0, 8 - diff * 4)  # Reduce score based on difference
 
     # Noise level compatibility (7 pts)
-    noise_levels = {"quiet": 1, "moderate": 2, "lively": 3}
-    diff = abs(noise_levels.get(pref_a.noise_level, 2) - noise_levels.get(pref_b.noise_level, 2))
+    noise_levels = {"quiet": 1, "moderate": 2, "loud": 3}
+    diff = abs(noise_levels.get(pref_a.noise_tolerance, 2) - noise_levels.get(pref_b.noise_tolerance, 2))
     score += max(0, 7 - diff * 3.5)  # Reduce score based on difference
 
     return round(score, 2)
