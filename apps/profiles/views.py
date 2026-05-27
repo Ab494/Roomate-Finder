@@ -107,9 +107,9 @@ class UpdateLocationView(APIView):
         area = request.data.get("area", "")
         if lat is None or lng is None:
             return Response({"error": "lat and lng are required"}, status=status.HTTP_400_BAD_REQUEST)
-        profile.lat = lat
-        profile.lng = lng
+        profile.lat = float(lat)
+        profile.lng = float(lng)
         profile.city = city
         profile.area = area
         profile.save()
-        return Response({"message": "Location updated", "lat": lat, "lng": lng})
+        return Response({"message": "Location updated", "lat": float(lat), "lng": float(lng)})
