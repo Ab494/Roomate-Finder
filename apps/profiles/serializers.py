@@ -10,16 +10,23 @@ class RegisterSerializer(serializers.ModelSerializer):
     """Serializer for user registration."""
 
     password = serializers.CharField(write_only=True, min_length=8)
-    first_name = serializers.CharField(write_only=True)
-    last_name = serializers.CharField(write_only=True, required=False, default="")
+    full_name = serializers.CharField(write_only=True)
+    phone = serializers.CharField(write_only=True, required=False, default="")
 
     class Meta:
         model = User
-        fields = ["email", "username", "role", "password", "first_name", "last_name"]
+        fields = ["email", "phone", "role", "password", "full_name"]
 
     def create(self, validated_data):
-        first_name = validated_data.pop("first_name")
-        last_name = validated_data.pop("last_name", "")
+        validated_data.pop("phone", None)
+        full_name = validated_data.pop("full_name", "")
+        parts = full_name.strip().split(" ", 1)
+        first_name = parts[0]
+        last_name = parts[1] if len(parts) > 1 else ""
+
+        # auto-generate username from email
+        validated_data["username"] = validated_data["email"].split("@")[0]
+
         user = User.objects.create_user(**validated_data)
         Profile.objects.create(user=user, first_name=first_name, last_name=last_name)
         Preference.objects.create(user=user)
@@ -42,6 +49,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     role = serializers.CharField(source="user.role", read_only=True)
     full_name = serializers.CharField(read_only=True)
     photo_url = serializers.SerializerMethodField()
+    lat = serializers.FloatField(allow_null=True, required=False)
+    lng = serializers.FloatField(allow_null=True, required=False)
 
     class Meta:
         model = Profile

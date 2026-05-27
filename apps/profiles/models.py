@@ -42,6 +42,10 @@ class User(AbstractUser):
     ]
 
     # Additional fields for our custom user model
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
+    email = models.EmailField(unique=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default=SEEKER)  # User's role on platform
     verification_status = models.CharField(
         max_length=12, choices=VERIFICATION_CHOICES, default=UNVERIFIED
@@ -54,6 +58,7 @@ class User(AbstractUser):
         default=0.0, validators=[MinValueValidator(0), MaxValueValidator(5)]
     )  # User's average rating from reviews
     total_reviews = models.PositiveIntegerField(default=0)  # Total number of reviews received
+
 
     class Meta:
         db_table = "users"  # Database table name
@@ -89,6 +94,7 @@ class Profile(models.Model):
     is_complete = models.BooleanField(default=False)  # Whether profile is fully filled out
     created_at = models.DateTimeField(auto_now_add=True)  # When profile was created
     updated_at = models.DateTimeField(auto_now=True)  # When profile was last updated
+
 
     class Meta:
         db_table = "profiles"  # Database table name
@@ -181,6 +187,7 @@ class Preference(models.Model):
     )  # List of preferred location IDs
     created_at = models.DateTimeField(auto_now_add=True, null=True)  # When preferences were created
     updated_at = models.DateTimeField(auto_now=True)  # When preferences were last updated
+
 
     class Meta:
         db_table = "preferences"  # Database table name
