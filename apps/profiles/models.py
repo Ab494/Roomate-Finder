@@ -59,7 +59,6 @@ class User(AbstractUser):
     )  # User's average rating from reviews
     total_reviews = models.PositiveIntegerField(default=0)  # Total number of reviews received
 
-
     class Meta:
         db_table = "users"  # Database table name
 
@@ -94,7 +93,6 @@ class Profile(models.Model):
     is_complete = models.BooleanField(default=False)  # Whether profile is fully filled out
     created_at = models.DateTimeField(auto_now_add=True)  # When profile was created
     updated_at = models.DateTimeField(auto_now=True)  # When profile was last updated
-
 
     class Meta:
         db_table = "profiles"  # Database table name
@@ -187,7 +185,6 @@ class Preference(models.Model):
     )  # List of preferred location IDs
     created_at = models.DateTimeField(auto_now_add=True, null=True)  # When preferences were created
     updated_at = models.DateTimeField(auto_now=True)  # When preferences were last updated
-
 
     class Meta:
         db_table = "preferences"  # Database table name
