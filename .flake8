@@ -1,0 +1,19 @@
+[flake8]
+max-line-length = 120
+exclude =
+    migrations,
+    __pycache__,
+    venv,
+    .venv,
+    .git
+
+# Ignore formatting rules — black handles these
+extend-ignore =
+    E1,E2,E3,
+    W1,W2,W3,W6,
+    E501
+
+# Per-file ignores
+per-file-ignores =
+    # Allow unused imports in __init__.py files
+    __init__.py: F401
