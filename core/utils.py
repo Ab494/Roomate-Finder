@@ -19,11 +19,11 @@ def haversine_distance(lat1, lon1, lat2, lon2):
     return R * 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
 
-def success_response(data=None, message='Success', status=200):
+def success_response(data=None, message="Success", status=200):
     """Create a standardized success response for API endpoints."""
-    return {'status': 'success', 'message': message, 'data': data}
+    return {"status": "success", "message": message, "data": data}
 
 
-def error_response(message='Error', errors=None):
+def error_response(message="Error", errors=None):
     """Create a standardized error response for API endpoints."""
-    return {'status': 'error', 'message': message, 'errors': errors}
+    return {"status": "error", "message": message, "errors": errors}

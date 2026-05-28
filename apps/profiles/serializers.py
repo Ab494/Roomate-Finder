@@ -1,34 +1,34 @@
-# This file contains Django REST Framework serializers for user profiles.
-# Serializers handle data validation, conversion, and API response formatting.
-
-from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Profile, Preference
+from rest_framework import serializers
 
-# Get the custom User model
+from .models import Preference, Profile
+
 User = get_user_model()
 
 
 class RegisterSerializer(serializers.ModelSerializer):
     """Serializer for user registration."""
-    # Password field with minimum length validation
+
     password = serializers.CharField(write_only=True, min_length=8)
-    # Full name field for registration (stored in Profile)
     full_name = serializers.CharField(write_only=True)
+    phone = serializers.CharField(write_only=True, required=False, default="")
 
     class Meta:
         model = User
-        fields = ['email', 'phone', 'role', 'password', 'full_name']
+        fields = ["email", "phone", "role", "password", "full_name"]
 
     def create(self, validated_data):
-        """Create user and automatically create related Profile and Preference objects."""
-        # Extract full_name from validated data (not part of User model)
-        full_name = validated_data.pop('full_name')
-        # Create user using custom manager
+        validated_data.pop("phone", None)
+        full_name = validated_data.pop("full_name", "")
+        parts = full_name.strip().split(" ", 1)
+        first_name = parts[0]
+        last_name = parts[1] if len(parts) > 1 else ""
+
+        # auto-generate username from email
+        validated_data["username"] = validated_data["email"].split("@")[0]
+
         user = User.objects.create_user(**validated_data)
-        # Create related profile with full name
-        Profile.objects.create(user=user, full_name=full_name)
-        # Create default preferences
+        Profile.objects.create(user=user, first_name=first_name, last_name=last_name)
         Preference.objects.create(user=user)
         return user
 
@@ -38,34 +38,46 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'phone', 'role', 'is_verified', 'created_at']
-        # Fields that cannot be modified via API
-        read_only_fields = ['id', 'is_verified', 'created_at']
+        fields = ["id", "email", "username", "role", "verification_status", "date_joined"]
+        read_only_fields = ["id", "verification_status", "date_joined"]
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    """Serializer for user profile data with additional computed fields."""
-    # Include user email (read-only, accessed via related user)
-    email = serializers.EmailField(source='user.email', read_only=True)
-    # Include user role (read-only)
-    role = serializers.CharField(source='user.role', read_only=True)
-    # Computed field for photo URL
+    """Serializer for user profile data."""
+
+    email = serializers.EmailField(source="user.email", read_only=True)
+    role = serializers.CharField(source="user.role", read_only=True)
+    full_name = serializers.CharField(read_only=True)
     photo_url = serializers.SerializerMethodField()
+    lat = serializers.FloatField(allow_null=True, required=False)
+    lng = serializers.FloatField(allow_null=True, required=False)
 
     class Meta:
         model = Profile
         fields = [
-            'id', 'email', 'role', 'full_name', 'bio', 'gender', 'age',
-            'occupation', 'photo', 'photo_url', 'lat', 'lng', 'city', 'area',
-            'average_rating', 'total_reviews', 'created_at',
+            "id",
+            "email",
+            "role",
+            "full_name",
+            "first_name",
+            "last_name",
+            "bio",
+            "occupation",
+            "profile_picture",
+            "photo_url",
+            "lat",
+            "lng",
+            "city",
+            "area",
+            "is_verified",
+            "is_complete",
+            "created_at",
         ]
-        # Fields that cannot be modified via API
-        read_only_fields = ['id', 'average_rating', 'total_reviews', 'created_at']
+        read_only_fields = ["id", "is_verified", "created_at"]
 
     def get_photo_url(self, obj):
-        """Return the full URL for the profile photo."""
-        if obj.photo:
-            return obj.photo.url
+        if obj.profile_picture:
+            return obj.profile_picture.url
         return None
 
 
@@ -74,13 +86,11 @@ class PreferenceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Preference
-        # Include all fields except the user field (implicit relationship)
-        exclude = ['user']
+        exclude = ["user"]
 
 
 class ChangePasswordSerializer(serializers.Serializer):
-    """Serializer for password change functionality."""
-    # Current password for verification
+    """Serializer for password change."""
+
     old_password = serializers.CharField(required=True)
-    # New password with minimum length validation
     new_password = serializers.CharField(required=True, min_length=8)

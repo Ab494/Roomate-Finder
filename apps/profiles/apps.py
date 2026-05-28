@@ -6,6 +6,6 @@ from django.apps import AppConfig
 
 class ProfilesConfig(AppConfig):
     # Use BigAutoField for primary keys (handles large datasets)
-    default_auto_field = 'django.db.models.BigAutoField'
+    default_auto_field = "django.db.models.BigAutoField"
     # App module path
-    name = 'apps.profiles'
+    name = "apps.profiles"
