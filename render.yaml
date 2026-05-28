@@ -1,0 +1,173 @@
+databases:
+  # ── PostgreSQL ────────────────────────────────────────────────────────────────
+  - name: roommate-finder-db
+    databaseName: roommate_finder
+    user: roommate_user
+    plan: free
+
+services:
+  # ── Redis ─────────────────────────────────────────────────────────────────────
+  - type: redis
+    name: roommate-finder-redis
+    plan: free
+    maxmemoryPolicy: allkeys-lru
+
+  # ── Web (Gunicorn HTTP) ────────────────────────────────────────────────────────
+  - type: web
+    name: roommate-finder-web
+    runtime: python
+    plan: free
+    branch: main
+    buildCommand: "./build.sh"
+    startCommand: >
+      gunicorn config.wsgi:application
+        --bind 0.0.0.0:$PORT
+        --workers 2
+        --threads 2
+        --timeout 120
+        --access-logfile -
+        --error-logfile -
+    healthCheckPath: /api/health/
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12"
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true           # Render auto-generates a secure value
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
+      - key: CORS_ALLOWED_ORIGINS
+        value: ""
+
+      # Database — pulled from the db defined above
+      - key: DB_NAME
+        fromDatabase:
+          name: roommate-finder-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: roommate-finder-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: roommate-finder-db
+          property: password
+      - key: DB_HOST
+        fromDatabase:
+          name: roommate-finder-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: roommate-finder-db
+          property: port
+
+      # Redis — pulled from the redis service above
+      - key: REDIS_URL
+        fromService:
+          name: roommate-finder-redis
+          type: redis
+          property: connectionString
+
+      # These you fill in manually on the Render dashboard
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: AT_USERNAME
+        value: sandbox
+      - key: AT_API_KEY
+        sync: false
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+
+  # ── Celery Worker ──────────────────────────────────────────────────────────────
+  - type: worker
+    name: roommate-finder-worker
+    runtime: python
+    plan: free
+    branch: main
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "celery -A config worker --loglevel=info --concurrency=2"
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12"
+      - key: SECRET_KEY
+        fromService:
+          name: roommate-finder-web
+          type: web
+          envVarKey: SECRET_KEY
+      - key: DB_NAME
+        fromDatabase:
+          name: roommate-finder-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: roommate-finder-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: roommate-finder-db
+          property: password
+      - key: DB_HOST
+        fromDatabase:
+          name: roommate-finder-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: roommate-finder-db
+          property: port
+      - key: REDIS_URL
+        fromService:
+          name: roommate-finder-redis
+          type: redis
+          property: connectionString
+
+  # ── Celery Beat ────────────────────────────────────────────────────────────────
+  - type: worker
+    name: roommate-finder-beat
+    runtime: python
+    plan: free
+    branch: main
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: >
+      celery -A config beat
+        --loglevel=info
+        --scheduler django_celery_beat.schedulers.DatabaseScheduler
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12"
+      - key: SECRET_KEY
+        fromService:
+          name: roommate-finder-web
+          type: web
+          envVarKey: SECRET_KEY
+      - key: DB_NAME
+        fromDatabase:
+          name: roommate-finder-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: roommate-finder-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: roommate-finder-db
+          property: password
+      - key: DB_HOST
+        fromDatabase:
+          name: roommate-finder-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: roommate-finder-db
+          property: port
+      - key: REDIS_URL
+        fromService:
+          name: roommate-finder-redis
+          type: redis
+          property: connectionString
