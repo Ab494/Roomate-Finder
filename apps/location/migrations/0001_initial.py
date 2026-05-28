@@ -7,23 +7,22 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='KenyanArea',
+            name="KenyanArea",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('city', models.CharField(max_length=100)),
-                ('area', models.CharField(max_length=100)),
-                ('lat', models.FloatField()),
-                ('lng', models.FloatField()),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("city", models.CharField(max_length=100)),
+                ("area", models.CharField(max_length=100)),
+                ("lat", models.FloatField()),
+                ("lng", models.FloatField()),
             ],
             options={
-                'db_table': 'kenyan_areas',
-                'ordering': ['city', 'area'],
-                'unique_together': {('city', 'area')},
+                "db_table": "kenyan_areas",
+                "ordering": ["city", "area"],
+                "unique_together": {("city", "area")},
             },
         ),
     ]

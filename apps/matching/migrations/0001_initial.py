@@ -10,28 +10,58 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('listings', '0001_initial'),
+        ("listings", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Match',
+            name="Match",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('score', models.FloatField(default=0.0, help_text='Compatibility score 0-100')),
-                ('status', models.CharField(choices=[('pending', 'Pending'), ('accepted', 'Accepted'), ('declined', 'Declined')], default='pending', max_length=10)),
-                ('score_breakdown', models.JSONField(default=dict)),
-                ('matched_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('listing', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='matches', to='listings.listing')),
-                ('user_a', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='matches_as_a', to=settings.AUTH_USER_MODEL)),
-                ('user_b', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='matches_as_b', to=settings.AUTH_USER_MODEL)),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("score", models.FloatField(default=0.0, help_text="Compatibility score 0-100")),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[("pending", "Pending"), ("accepted", "Accepted"), ("declined", "Declined")],
+                        default="pending",
+                        max_length=10,
+                    ),
+                ),
+                ("score_breakdown", models.JSONField(default=dict)),
+                ("matched_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "listing",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="matches",
+                        to="listings.listing",
+                    ),
+                ),
+                (
+                    "user_a",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="matches_as_a",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "user_b",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="matches_as_b",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'db_table': 'matches',
-                'ordering': ['-score'],
-                'unique_together': {('user_a', 'user_b', 'listing')},
+                "db_table": "matches",
+                "ordering": ["-score"],
+                "unique_together": {("user_a", "user_b", "listing")},
             },
         ),
     ]
