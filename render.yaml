@@ -11,6 +11,7 @@ services:
     name: roommate-finder-redis
     plan: free
     maxmemoryPolicy: allkeys-lru
+    ipAllowList: []
 
   # ── Web (Gunicorn HTTP) ────────────────────────────────────────────────────────
   - type: web
@@ -68,7 +69,6 @@ services:
           name: roommate-finder-redis
           type: redis
           property: connectionString
-          ipAllowList: []
 
       # These you fill in manually on the Render dashboard
       - key: CLOUDINARY_CLOUD_NAME
