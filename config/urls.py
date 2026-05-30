@@ -1,21 +1,18 @@
 from django.contrib import admin
-from django.http import JsonResponse
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
-
-def health_check(request):
-    return JsonResponse({"status": "healthy"})
-
-
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # Health check
-    path("api/health/", health_check, name="health-check"),
+
+    # Health check — used by Render, Docker, and uptime monitors
+    path("api/health/", include("apps.health.urls")),
+
     # API docs
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     path("api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
+
     # App endpoints
     path("api/auth/", include("apps.profiles.urls.auth")),
     path("api/profiles/", include("apps.profiles.urls.profiles")),
