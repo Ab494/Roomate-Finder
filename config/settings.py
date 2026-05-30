@@ -156,6 +156,8 @@ SPECTACULAR_SETTINGS = {
 # ── CORS ───────────────────────────────────────────────────────────────────────
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
+CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
 
 # ── Storage (Django 4.2+ STORAGES dict replaces deprecated individual settings)
 STORAGES = {
