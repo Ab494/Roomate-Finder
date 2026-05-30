@@ -3,7 +3,6 @@ databases:
   - name: roommate-finder-db
     databaseName: roommate_finder
     user: roommate_user
-    plan: starter
 
 services:
   # ── Redis ─────────────────────────────────────────────────────────────────────
