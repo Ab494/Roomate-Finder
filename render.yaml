@@ -3,13 +3,13 @@ databases:
   - name: roommate-finder-db
     databaseName: roommate_finder
     user: roommate_user
-    plan: free
+    plan: starter
 
 services:
   # ── Redis ─────────────────────────────────────────────────────────────────────
   - type: redis
     name: roommate-finder-redis
-    plan: free
+    plan: starter
     maxmemoryPolicy: allkeys-lru
     ipAllowList: []
 
@@ -17,7 +17,7 @@ services:
   - type: web
     name: roommate-finder-web
     runtime: python
-    plan: free
+    plan: starter
     branch: main
     buildCommand: "./build.sh"
     startCommand: >
@@ -90,7 +90,7 @@ services:
   - type: worker
     name: roommate-finder-worker
     runtime: python
-    plan: free
+    plan: starter
     branch: main
     buildCommand: "pip install -r requirements.txt"
     startCommand: "celery -A config worker --loglevel=info --concurrency=2"
@@ -132,7 +132,7 @@ services:
   - type: worker
     name: roommate-finder-beat
     runtime: python
-    plan: free
+    plan: starter
     branch: main
     buildCommand: "pip install -r requirements.txt"
     startCommand: >
