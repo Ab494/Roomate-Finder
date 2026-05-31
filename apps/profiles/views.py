@@ -113,3 +113,30 @@ class UpdateLocationView(APIView):
         profile.area = area
         profile.save()
         return Response({"message": "Location updated", "lat": float(lat), "lng": float(lng)})
+
+
+# ── Custom Login View ──────────────────────────────────────────────────────────
+class LoginView(APIView):
+    """Returns access + refresh tokens AND user data in one response."""
+
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+        serializer = TokenObtainPairSerializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except Exception:
+            return Response(
+                {"detail": "Invalid email or password"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+        user = serializer.user
+        return Response(
+            {
+                "access": str(serializer.validated_data["access"]),
+                "refresh": str(serializer.validated_data["refresh"]),
+                "user": UserSerializer(user).data,
+            }
+        )
