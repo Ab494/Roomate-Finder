@@ -1,0 +1,11 @@
+render_api_key  = "rnd_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+render_owner_id = "usr_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+secret_key      = "your-50-char-django-secret-key-here"
+
+cloudinary_cloud_name = "your-cloud"
+cloudinary_api_key    = "your-key"
+cloudinary_api_secret = "your-secret"
+
+at_api_key          = "your-at-key"
+email_host_user     = "you@gmail.com"
+email_host_password = "your-app-password"
